@@ -1,0 +1,24 @@
+Source: sddm-systeminfo
+Section: kde
+Priority: optional
+Maintainer: Dein Name <dein-email@example.com>
+Build-Depends: debhelper-compat (= 13),
+               cmake (>= 3.16),
+               qt6-base-dev,
+               qt6-declarative-dev
+Standards-Version: 4.6.2
+Homepage: https://github.com/dein-user/sddm-systeminfo
+Vcs-Browser: https://github.com/dein-user/sddm-systeminfo
+Vcs-Git: https://github.com/dein-user/sddm-systeminfo.git
+Rules-Requires-Root: no
+
+Package: sddm-systeminfo
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+         qt6-base,
+         qt6-declarative
+Description: Universal QML plugin for SDDM greeter themes
+ SddmSystemInfo is a Qt6/QML extension plugin for SDDM greeter themes.
+ It provides a JsonStatusReader type that watches local JSON files
+ and exposes their contents as QML properties, eliminating the need
+ for XMLHttpRequest in the restricted SDDM greeter environment.

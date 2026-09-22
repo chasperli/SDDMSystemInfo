@@ -1,0 +1,26 @@
+# Maintainer: Dein Name <dein-email@example.com>
+pkgname=sddm-systeminfo
+cpkgver=1.0.0
+pkgrel=1
+pkgdesc="Universal QML plugin for SDDM greeter themes to read JSON status files"
+arch=('x86_64' 'aarch64')
+url="https://github.com/dein-user/sddm-systeminfo"
+license=('GPL-2.0-or-later')
+depends=('qt6-base' 'qt6-declarative')
+makedepends=('cmake' 'ninja')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+    cd "$pkgname-$pkgver"
+    cmake -B build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -G Ninja
+    ninja -C build
+}
+
+package() {
+    cd "$pkgname-$pkgver"
+    DESTDIR="$pkgdir" ninja -C build install
+}
