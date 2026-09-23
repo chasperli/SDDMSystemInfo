@@ -1,0 +1,30 @@
+; Prelogin Status Daemon — example configuration
+; Target path: /etc/prelogin-statusd/config.ini
+
+[General]
+; Update interval in seconds for normal checks.
+; At 0, only manual Refresh() calls are processed.
+; If a service goes down, the daemon automatically retries
+; every 5 seconds for a maximum of 5 minutes.
+UpdateIntervalSeconds=60
+
+; Publish detailed error messages on the D-Bus?
+; Default: false (only abstract states like "unavailable", "timeout")
+ExposeErrors=false
+
+[Tailscale]
+; Path to the tailscaled Unix socket
+; Variables like $HOME are NOT expanded — use absolute paths.
+Socket=/var/run/tailscale/tailscaled.sock
+
+[Directory]
+; Directory service type: none | ldap | ldaps | kerberos
+; Default: none (provider inactive)
+Type=none
+
+; Hostname or IP with optional port (e.g., ldap.company.local:389)
+; If the port is empty, standard ports are used (LDAP 389, LDAPS 636, Kerberos 88)
+Endpoint=
+
+; Timeout for reachability checks in milliseconds
+TimeoutMilliseconds=2000

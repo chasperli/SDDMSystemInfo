@@ -1,1 +1,6 @@
 CMakeLists.txt
+# Local test configurations (contain real endpoints, should not be committed)
+prelogin-statusd/config/*.test
+# Build directories
+build/
+prelogin-statusd/build/
