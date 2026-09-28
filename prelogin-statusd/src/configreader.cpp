@@ -23,8 +23,29 @@ bool ConfigReader::load(const QString &path)
         return false;
     }
 
-    m_settings = new QSettings(path, QSettings::IniFormat, this);
+    const QString absolutePath = fi.absoluteFilePath();
+    qDebug() << "Loading config from:" << absolutePath;
+
+    m_settings = new QSettings(absolutePath, QSettings::IniFormat, this);
+    m_settings->sync(); // force read from disk
+
+    if (m_settings->status() != QSettings::NoError) {
+        qWarning() << "Failed to parse config file:" << absolutePath;
+        m_loaded = false;
+        return false;
+    }
+
+    // DEBUG: Show what QSettings actually sees
+    qDebug() << "QSettings child groups:" << m_settings->childGroups();
+    qDebug() << "QSettings all keys:" << m_settings->allKeys();
+
     m_loaded = true;
+
+    // Debug output: show what we have actually read
+    qDebug() << "Config loaded: UpdateIntervalSeconds =" << updateIntervalSeconds()
+             << "| TailscaleSocket =" << tailscaleSocket()
+             << "| DirectoryType =" << directoryType()
+             << "| DirectoryEndpoint =" << directoryEndpoint();
 
     return true;
 }
@@ -69,7 +90,7 @@ int ConfigReader::updateIntervalSeconds() const
     if (!m_loaded)
         return 5;
 
-    return m_settings->value(QStringLiteral("General/UpdateIntervalSeconds"), 5).toInt();
+    return m_settings->value(QStringLiteral("UpdateIntervalSeconds"), 5).toInt();
 }
 
 bool ConfigReader::exposeErrors() const
@@ -77,5 +98,5 @@ bool ConfigReader::exposeErrors() const
     if (!m_loaded)
         return false;
 
-    return m_settings->value(QStringLiteral("General/ExposeErrors"), false).toBool();
+    return m_settings->value(QStringLiteral("ExposeErrors"), false).toBool();
 }

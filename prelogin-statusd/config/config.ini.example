@@ -1,5 +1,7 @@
 ; Prelogin Status Daemon — example configuration
 ; Target path: /etc/prelogin-statusd/config.ini
+; Note: Qt6 treats [General] as a special section where keys appear
+; without a group prefix. All keys here are top-level for Qt's QSettings.
 
 [General]
 ; Update interval in seconds for normal checks.

@@ -256,6 +256,35 @@ When a service is unreachable, `StatusDaemon` automatically switches to a retry 
 
 ---
 
+## Testing
+
+### Integration Tests (`tests/integration/`)
+
+Runs the daemon against a **temporary D-Bus system bus** — no systemd required. Useful for CI and container environments (Distrobox, Docker).
+
+```bash
+cd tests/integration
+bash run_tests.sh
+```
+
+**Verified in tests:**
+- D-Bus registration (`org.prelogin.Status1`)
+- Properties: `Version`, `TailscaleState`, `DirectoryServiceState`, `TailscalePeerCount`, ...
+- Methods: `GetCapabilities()`, `Refresh()`
+- Config file loading (`UpdateIntervalSeconds`, `ExposeErrors`, ...)
+
+**Test environment packages:**
+| Distro | Packages |
+|--------|----------|
+| Arch | `dbus`, `qt6-base`, `python3`, `bash` |
+| Debian/Ubuntu | `dbus-daemon`, `dbus-x11`, `qt6-base-dev`, `python3`, `bash` |
+
+**Tailscale in tests:**
+- The test config points to a **non-existent socket** — the daemon correctly reports `unavailable`.
+- To test with real Tailscale data, start `tailscaled` or provide a mock Unix socket that replies to `/localapi/v0/status`.
+
+---
+
 ## Future Plans
 
 `prelogin-statusd` is actively in development within this repository. See `docs/prelogin-status-concept.md` for the revised architecture concept (gap-filler instead of centralizer).

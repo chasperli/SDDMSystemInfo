@@ -119,6 +119,7 @@ void StatusDaemon::Refresh()
 {
     m_tailscale->refresh();
     m_directory->refresh();
+    evaluateAndSwitchMode();
 }
 
 void StatusDaemon::doPeriodicRefresh()

@@ -178,6 +178,45 @@ An alternative configuration path can be passed at startup:
 prelogin-statusd --config /path/to/config.ini
 ```
 
+## Testing
+
+### Integration Tests (Daemon)
+
+Automated integration tests are available in `tests/integration/`. They run **without systemd** by launching a temporary D-Bus system bus.
+
+```bash
+cd tests/integration
+bash run_tests.sh
+```
+
+**What the tests verify:**
+- D-Bus registration as `org.prelogin.Status1`
+- Property reads (Version, TailscaleState, DirectoryServiceState, ...)
+- Method calls (GetCapabilities, Refresh)
+- Configuration file parsing
+
+**Output example:**
+```
+[PASS] D-Bus registration and property Version
+[PASS] Property TailscaleState reports unavailable when socket missing
+...
+Results: 8/8 passed (100%)
+```
+
+**Test environment requirements:**
+- `python3` (for the Tailscale mock server)
+- `dbus-daemon`, `dbus-x11` (for `dbus-send`)
+- `qt6-base-dev` (on Ubuntu), or `qt6-base` + `qt6-dbus` (on Arch)
+- `bash`
+
+See `tests/requirements.md` for a detailed package list per distribution.
+
+### Tailscale Testing
+
+The integration tests detect a missing Tailscale socket as `unavailable`. This is a valid test state.
+
+To test with a real Tailscale connection, install `tailscale` in the test environment and start `tailscaled` with a valid socket path. For CI, a mock Unix socket can be used instead.
+
 ## License
 
 GPL-2.0-or-later
